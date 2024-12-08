@@ -1,103 +1,134 @@
-/* Nikita Bansode, Roll no.:10, DSPS Assignment no.:6, 26-9-24 */
 #include <iostream>
 using namespace std;
 
 class Queue {
-    int front, rear, size;
-    int q[10];
+    int front, rear;
+    int q[10]; 
+    int n;
 
 public:
-    Queue() : front(-1), rear(-1), size(10) {}
-
-    void enqueue() {
-        int ele;
-        cout << "Enter the element: ";
-        cin >> ele;
-
-        if (rear == size - 1) {
-            cout << "Queue is full" << endl;
-        } else {
-            if (front == -1) front = 0;
-            q[++rear] = ele;
-            cout << "Enqueued: " << ele << endl;
-        }
+    Queue(int size) {
+        n = size;
+        front = rear = -1;
     }
 
-    void dequeue() {
-        if (front == -1) {
-            cout << "Queue is empty" << endl;
-        } else {
-            cout << "Dequeued: " << q[front] << endl;
-            if (front == rear) {
-                front = rear = -1;
-            } else {
-                front++;
-            }
-        }
-    }
-
-    void check() {
-        if (front == -1) {
-            cout << "Queue is empty" << endl;
-        } else if (rear == size - 1) {
-            cout << "Queue is full" << endl;
-        } else {
-            cout << "Queue has elements" << endl;
-        }
-    }
-
-    void display() {
-        if (front == -1) {
-            cout << "Queue is empty" << endl;
-        } else {
-            cout << "Queue elements: ";
-            for (int i = front; i <= rear; i++) {
-                cout << q[i] << " ";
-            }
-            cout << endl;
-        }
-    }
-
-    void peak() {
-        if (front == -1) {
-            cout << "Queue is empty" << endl;
-        } else {
-            cout << "Front element: " << q[front] << endl;
-        }
-    }
+    void enqueue(int ele);
+    void dequeue();
+    void peak();
+    void display();
+    bool isFull();
+    bool isEmpty();
 };
 
+void Queue::enqueue(int ele) {
+    if (isFull()) {
+        cout << "\nQueue is full.";
+        return;
+    }
+    if (isEmpty()) {
+        front = 0; 
+    }
+    rear++;
+    q[rear] = ele;
+}
+
+void Queue::dequeue() {
+    if (isEmpty()) {
+        cout << "\nQueue is empty.";
+        return;
+    }
+    cout << "\nDequeued element: " << q[front];
+    front++;
+    if (front > rear) {
+        front = rear = -1;
+    }
+}
+
+void Queue::peak() {
+    if (isEmpty()) {
+        cout << "\nQueue is empty.";
+        return;
+    }
+    cout << "\nFront element: " << q[front];
+}
+
+bool Queue::isFull() {
+    return rear == n - 1;
+}
+
+bool Queue::isEmpty() {
+    return front == -1 || front > rear;
+}
+
+void Queue::display() {
+    if (isEmpty()) {
+        cout << "\nQueue is empty.";
+        return;
+    }
+    cout << "\nElements are: ";
+    for (int i = front; i <= rear; i++) {
+        cout "\t"<< q[i] << "\t";
+    }
+}
+
 int main() {
-    Queue q;
-    int ch;
+    int n, ch, ele;
+    cout << "\nEnter total number of elements: ";
+    cin >> n;
 
+    Queue q(n); 
+    
     do {
-        cout << "\nMenu:\n1. Enqueue\n2. Dequeue\n3. Check\n4. Peak\n5. Display\n6. Exit\nEnter choice: ";
+        cout << "\n1.Enqueue\n2.Dequeue\n3.IsFull\n4.IsEmpty\n5.Peak\n6.Display\nEnter 0 to exit.\n";
+        cout << "\nEnter your choice: ";
         cin >> ch;
-
-        switch (ch) {
+        
+        switch(ch) {
             case 1:
-                q.enqueue();
+                for (int i = 0; i < n; i++) {
+                    cout << "\nEnter the element: ";
+                    cin >> ele;
+                    q.enqueue(ele);
+                }
                 break;
-            case 2:
+
+            case 2: 
                 q.dequeue();
                 break;
+
             case 3:
-                q.check();
+                if (q.isFull()) {
+                    cout << "\nQueue is full.";
+                } else {
+                    cout << "\nQueue is not full.";
+                }
                 break;
+
             case 4:
-                q.peak();
+                if (q.isEmpty()) {
+                    cout << "\nQueue is empty.";
+                } else {
+                    cout << "\nQueue is not empty.";
+                }
                 break;
+
             case 5:
+                q.peak(); 
+                break;
+
+            case 6:
                 q.display();
                 break;
-            case 6:
-                cout << "Exiting..." << endl;
+
+            case 0:
+                cout << "\nExiting...";
                 break;
+
             default:
-                cout << "Invalid choice!" << endl;
+                cout << "\nInvalid choice.";
+                break;
         }
-    } while (ch != 6);
+    } while(ch != 0);
 
     return 0;
 }
